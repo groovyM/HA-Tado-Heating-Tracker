@@ -304,8 +304,9 @@ def main():
     )
     delete_month_entries(cursor, est_meta_id, year, month)
 
+    # Estimate resets to 0 each month (no cumulative carry-over between months)
     first_day_ts = get_day_ts(year, month, 1)
-    cumulative   = get_previous_sum(cursor, est_meta_id, first_day_ts)
+    cumulative   = 0.0
     now_ts       = datetime.now(timezone.utc).timestamp()
 
     print("\nDaily estimates:")
