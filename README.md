@@ -123,7 +123,62 @@ script:
           kwh: "{{ states('input_number.heating_import_kwh') }}"
 ```
 
-### 9. Restart Home Assistant
+### 9. Create the dashboard
+
+Create a new dashboard (or add a view to an existing one) with the following Lovelace YAML:
+
+```yaml
+views:
+  - title: Heating Energy
+    cards:
+      - type: entities
+        title: 🔥 Enter monthly consumption
+        entities:
+          - entity: input_datetime.heating_import_date
+            name: Select month
+          - entity: input_number.heating_import_kwh
+            name: Consumption (kWh)
+          - type: button
+            name: Import
+            tap_action:
+              action: call-service
+              service: script.heating_import
+
+      - type: statistics-graph
+        title: 📊 Daily estimates (current month)
+        entities:
+          - entity: sensor.heating_energy_kwh
+            name: Actual
+          - entity: sensor.heating_energy_estimate_kwh
+            name: Estimate
+        stat_types:
+          - change
+        period: day
+        days_to_show: 30
+        chart_type: bar
+
+      - type: statistic
+        entity: sensor.heating_energy_kwh
+        name: Actual consumption this month
+        stat_type: change
+        period:
+          calendar:
+            period: month
+        icon: mdi:fire
+
+      - type: statistic
+        entity: sensor.heating_energy_estimate_kwh
+        name: Estimated consumption this month
+        stat_type: change
+        period:
+          calendar:
+            period: month
+        icon: mdi:chart-line
+```
+
+To create a new dashboard: **Settings → Dashboards → Add Dashboard**, then edit it and switch to YAML mode.
+
+### 10. Restart Home Assistant
 
 After restarting, verify both template sensors appear in **Developer Tools → States**.
 
