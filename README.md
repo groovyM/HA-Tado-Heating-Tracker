@@ -197,7 +197,17 @@ The script will distribute the total across the days of that month, weighted by 
 
 ### Viewing estimates
 
-The daily estimation runs automatically at 03:00. You can also trigger it manually via **Developer Tools → Actions → `shell_command.heating_estimate`**.
+The daily estimation runs automatically at 03:00.
+
+**First run:** After installation, trigger it once manually so you don't have to wait until 03:00:
+
+1. Go to **Developer Tools → Actions**
+2. Search for `shell_command.heating_estimate`
+3. Click **Perform action**
+
+After that, the automation handles everything automatically every night.
+
+> **Note:** The estimation sensor only appears in the statistics database after the first successful run. If the dashboard shows no data, trigger the script manually as described above.
 
 Add `sensor.heating_energy_estimate_kwh` to your Energy Dashboard or a statistics-graph card to see daily estimates.
 
