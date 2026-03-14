@@ -92,7 +92,7 @@ def get_previous_sum(cursor, meta_id, ts):
 def delete_month_entries(cursor, meta_id, year, month):
     days_in_month = calendar.monthrange(year, month)[1]
     first_ts = get_day_ts(year, month, 1)
-    last_ts  = get_day_ts(year, month, days_in_month) + 3600
+    last_ts  = get_day_ts(year, month, days_in_month) + 86400  # full last day
     cursor.execute(
         "DELETE FROM statistics WHERE metadata_id = %s "
         "AND start_ts >= %s AND start_ts <= %s",
