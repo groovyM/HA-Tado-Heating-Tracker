@@ -96,13 +96,20 @@ In Home Assistant go to **Settings → Automations → Add Automation** and use 
 
 ```yaml
 alias: Heating Energy Estimate daily
+description: Runs daily at 03:00 and also after HA restart to prevent negative values
 trigger:
   - platform: time
     at: "03:00:00"
+  - platform: homeassistant
+    event: start
 action:
+  - delay:
+      minutes: 2
   - action: shell_command.heating_estimate
 mode: single
 ```
+
+> **Important:** The `homeassistant: start` trigger is essential. Without it, Home Assistant's internal statistics process runs after a restart and recalculates the cumulative `sum` values incorrectly, causing large negative spikes in the chart. The 2-minute delay ensures HA is fully loaded before the script runs.
 
 ### 7. Add input helpers (for the import form)
 
